@@ -11,15 +11,14 @@ go install github.com/knaka/s3clt/cmd/s3put
 
 ## Synopsis
 
-Retrieve an S3 object and output it to stdout. `s3get ...` is equivalent to `s3clt get ...`.
-
+Retrieve an S3 object and output it to stdout. `s3get ...` is equivalent to `s3clt get ...`. Symlink `s3get` to `s3clt` binary works as `s3get`.
 
 ```shell
 s3clt get us-east-1 DOC-EXAMPLE-BUCKET1 foo.tar | tar xvf -
 s3get us-east-1 DOC-EXAMPLE-BUCKET1 foo.tar | tar xvf -
 ```
 
-Read data from stdin and upload it as an S3 object. `s3put ...` is equivalent to `s3clt put ...`.
+Read data from stdin and upload it as an S3 object. `s3put ...` is equivalent to `s3clt put ...`. Symlink `s3put` to `s3clt` binary works as `s3put`.
 
 
 ```shell
