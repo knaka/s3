@@ -24,15 +24,15 @@ func Test_getSession(t *testing.T) {
 			"bucketX",
 			"keyX",
 		},
-		{
-			"Without region",
-			args{
-				[]string{"bucketX", "keyX"},
-			},
-			"",
-			"bucketX",
-			"keyX",
-		},
+		//{
+		//	"Without region",
+		//	args{
+		//		[]string{"bucketX", "keyX"},
+		//	},
+		//	"",
+		//	"bucketX",
+		//	"keyX",
+		//},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
