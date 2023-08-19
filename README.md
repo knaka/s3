@@ -9,6 +9,8 @@ go install github.com/knaka/s3clt/cmd/s3get
 go install github.com/knaka/s3clt/cmd/s3put
 ```
 
+UPX-compressed executables are available in [Releases](https://github.com/knaka/s3clt/releases).
+
 ## Synopsis
 
 Retrieve an S3 object and output it to stdout. `s3get ...` is equivalent to `s3clt get ...`. Symlink `s3get` to `s3clt` binary works as `s3get`.
