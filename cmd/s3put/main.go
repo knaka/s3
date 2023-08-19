@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	s3clt.Run(s3clt.CommandPut, os.Args[1:])
+	s3clt.RunPut(os.Args[1:])
 }

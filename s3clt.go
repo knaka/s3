@@ -2,7 +2,6 @@ package s3clt
 
 import (
 	"context"
-	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -69,37 +68,44 @@ const (
 	CommandPut
 )
 
-func Run(command Command, args []string) {
+func RunGet(args []string) {
+	sess, bucket, key := getSession(args)
+	client := s3.New(sess)
+	result, err := client.GetObject(&s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		log.Panicln("Failed to get object,", err)
+	}
+	defer (func() { _ = result.Body.Close() })()
+	_, err = io.Copy(os.Stdout, result.Body)
+	if err != nil {
+		log.Panicln("Failed to write to stdout,", err)
+	}
+}
+
+func RunPut(args []string) {
 	var err error
 	sess, bucket, key := getSession(args)
+	uploader := s3manager.NewUploader(sess, func(u *s3manager.Uploader) {})
+	_, err = uploader.UploadWithContext(context.Background(), &s3manager.UploadInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+		Body:   &reader{os.Stdin},
+	})
+	if err != nil {
+		log.Panicf("panic 02596e7 (%v)", err)
+	}
+}
+
+func Run(command Command, args []string) {
+	//var err error
 	switch command {
 	case CommandGet:
-		client := s3.New(sess)
-		result, err := client.GetObject(&s3.GetObjectInput{
-			Bucket: aws.String(bucket),
-			Key:    aws.String(key),
-		})
-		if err != nil {
-			fmt.Println("failed to get object,", err)
-			return
-		}
-		defer (func() { _ = result.Body.Close() })()
-		_, err = io.Copy(os.Stdout, result.Body)
-		if err != nil {
-			fmt.Println("failed to write to stdout,", err)
-			return
-		}
+		RunGet(args)
 	case CommandPut:
-		uploader := s3manager.NewUploader(sess, func(u *s3manager.Uploader) {})
-		_, err = uploader.UploadWithContext(context.Background(), &s3manager.UploadInput{
-			Bucket: aws.String(bucket),
-			Key:    aws.String(key),
-			Body:   &reader{os.Stdin},
-		})
-		if err != nil {
-			log.Panicf("panic 02596e7 (%v)", err)
-		}
-		return
+		RunPut(args)
 	default:
 		panic("Unknown command")
 	}
