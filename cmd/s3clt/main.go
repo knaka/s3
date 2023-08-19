@@ -3,13 +3,14 @@ package main
 import (
 	"github.com/knaka/s3clt"
 	"os"
+	"path"
 )
 
 func main() {
 	//var err error
 	command := s3clt.CommandUnknown
 	args := os.Args[1:]
-	switch os.Args[0] {
+	switch path.Base(os.Args[0]) {
 	case "s3get":
 		command = s3clt.CommandGet
 	case "s3put":
